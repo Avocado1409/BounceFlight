@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="images/naga.png"/>
+  <title>Bounce Flight</title>
+  <link rel="stylesheet" href="leaderboard.css">
+</head>
+<body>
+    <div class="leaderboard-container">
+        <h2>🏆 Leaderboard</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Peringkat</th>
+              <th>Username</th>
+              <th>Skor Tertinggi</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard"></tbody>
+            <!-- Data akan diisi oleh JavaScript -->
+          </tbody>
+        </table>
+        <div class="back-btn-container">
+            <button onclick="goBackToGame()">← Kembali ke Game</button>
+          </div>
+      </div>
+      
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB-V53qP826F7iCZqI3oq2rw8vX_TORd4w",
+      authDomain: "bounceflightgame.firebaseapp.com",
+      projectId: "bounceflightgame",
+      storageBucket: "bounceflightgame.appspot.com",
+      messagingSenderId: "778701630141",
+      appId: "1:778701630141:web:23a3937cb0b2bdb60265d4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const leaderboardTable = document.getElementById("leaderboard");
+
+    async function loadLeaderboard() {
+      const q = query(collection(db, "users"), orderBy("highScore", "desc"), limit(10));
+      const querySnapshot = await getDocs(q);
+      let rank = 1;
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${rank++}</td>
+          <td>${data.username || "Anonim"}</td>
+          <td>${data.highScore || 0}</td>
+        `;
+        leaderboardTable.appendChild(row);
+      });
+    }
+
+    loadLeaderboard();
+    
+    document.querySelector(".back-btn-container button").addEventListener("click", () => {
+  window.location.href = "game.html";
+});
+  </script>
+</body>
+</html>

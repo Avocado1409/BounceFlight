@@ -1,0 +1,80 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('images/bgpx-3.png');
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.leaderboard-container {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+.leaderboard-container h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+/* === TABEL LEADERBOARD === */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+th {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+tbody tr:nth-child(1) {
+    background: rgba(255, 215, 0, 0.2); /* gold */
+}
+
+tbody tr:nth-child(2) {
+    background: rgba(192, 192, 192, 0.2); /* silver */
+}
+
+tbody tr:nth-child(3) {
+    background: rgba(205, 127, 50, 0.2); /* bronze */
+}
+
+.back-btn-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.back-btn-container button {
+    background-color: #ff9800;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.back-btn-container button:hover {
+    background-color: #e68900;
+}

@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Pixelify Sans', Arial, Helvetica, sans-serif;
+}
+.background {
+	height: 100vh;
+	width: 100vw;
+	background: url('images/bg.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.bird {
+	height: 100px;
+	width: 130px;
+	position: fixed;
+	top: 40vh;
+	left: 30vw;
+	z-index: 100;
+}
+.pipe_sprite {
+	position: fixed;
+	top: 40vh;
+	left: 100vw;
+	height: 70vh;
+	width: 6vw;
+	background:radial-gradient(rgb(82, 82, 82) 50%, rgb(31, 30, 30));
+	border: 5px solid black;
+}
+.message {
+	position: absolute;
+	z-index: 10;
+	color: rgb(255, 255, 255);
+	top: 30%;
+	left: 50%;
+	font-size: 4em;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+.messageStyle{
+	background: transparent;
+	padding: 3px;
+	border-radius: 5%;
+}
+
+.score_title,
+.highscore_title {
+  font-size: 50px; /* atur ukuran sesuai keinginan */
+}
+
+.score_val,
+.highscore_val {
+  font-size: 50px; /* nilai score-nya bisa sedikit lebih besar */
+}
+
+.score {
+	position: fixed;
+	z-index: 10;
+	height: 10vh;
+	font-size: 10vh;
+	font-weight: 100;
+	color: white;
+	-webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+	top: 0;
+	left: 0;
+	margin: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.score_val {
+	color: gold;
+	font-weight: bold;
+}
+@media only screen and (max-width: 1080px) {
+    .message{
+		font-size: 50px;
+		top: 50%;
+		white-space: nowrap;
+	}
+	.score{
+		font-size: 8vh;
+	}
+	.bird{
+		width: 120px;
+		height: 90px;
+	}
+	.pipe_sprite{
+		width: 14vw;
+	}
+}
+#play-btn {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 40px;
+    font-size: 2em;
+    background-color: #eb1805;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 20;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+#play-btn:hover {
+    background-color: #e16607;
+}
+
+#leaderboard-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+	z-index: 1000;
+    padding: 10px 20px;
+    background-color: #eb1805;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+	color: white;
+}
+
+#leaderboard-btn:hover {
+    background-color: #e16607;
+}
+
+#logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+	z-index: 1000;
+    padding: 10px 20px;
+    background-color: #eb1805;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+	margin-top: 3rem;
+	color: white;
+}
+
+#logout-btn:hover {
+    background-color: #e16607;
+}
+
+#home-btn {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 40px;
+    font-size: 2em;
+    background-color: #eb1805;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 20;
+    display: block;
+    transition: background-color 0.3s;
+	margin-top: 5rem;
+}
+
+#home-btn:hover {
+    background-color: #e16607;
+}

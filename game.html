@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/naga.png"/>
+    <title>Bounce Flight</title>
+    <link rel="stylesheet" href="game.css">
+    <script src="game.js" defer></script>
+</head>
+<body>
+    <div class="background"></div>
+    <img src="images/naga.png" alt="bird-img" class="bird" id="bird-1">
+
+    <div class="message">
+        <img src="images/Group 4 (1).png">
+    </div>
+
+    <button id="play-btn">Play</button>
+    
+    <a href="index.html">
+      <button id="logout-btn">Log Out</button>
+    </a>
+    <a href="leaderboard.html">
+      <button id="leaderboard-btn">Leaderboard</button>
+    </a>
+    <a href="game.html">
+      <button id="home-btn" style="display: none;">home</button>
+    </a>
+
+    <div class="score">
+        <span class="score_title"></span>
+        <span class="score_val"></span>
+        <span class="highscore_title"></span>
+        <span class="highscore_val"></span>
+    </div>
+
+
+    <script type="module">
+      
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import { getFirestore, doc, getDoc, setDoc, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    
+      const firebaseConfig = {
+        apiKey: "AIzaSyB-V53qP826F7iCZqI3oq2rw8vX_TORd4w",
+        authDomain: "bounceflightgame.firebaseapp.com",
+        projectId: "bounceflightgame",
+        storageBucket: "bounceflightgame.appspot.com",
+        messagingSenderId: "778701630141",
+        appId: "1:778701630141:web:23a3937cb0b2bdb60265d4"
+      };
+    
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth();
+    
+      // PANGGIL INI SETELAH LOGIN
+      async function loadUserHighScore() {
+        const user = auth.currentUser;
+        if (!user) return;
+    
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+    
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          highscore = data.highScore || 0;
+          highscore_val.innerHTML = highscore;
+        }
+      }
+    
+      async function saveHighScore(score) {
+        const user = auth.currentUser;
+        if (!user) return;
+    
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+    
+        if (!userSnap.exists()) {
+          await setDoc(userRef, {
+            email: user.email,
+            highScore: score
+          });
+        } else {
+          const data = userSnap.data();
+          if (score > (data.highScore || 0)) {
+            await setDoc(userRef, {
+              email: user.email,
+              highScore: score
+            }, { merge: true });
+          }
+        }
+      }
+    
+      // ✅ Saat user login, muat high score
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          loadUserHighScore();
+        } else {
+          console.log("Belum login");
+        }
+      });
+      window.saveHighScore = saveHighScore;
+    </script>
+
+      
+</body>
+</html>
