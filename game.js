@@ -27,7 +27,7 @@ let game_state = 'Start';
 img.style.display = 'none';
 message.classList.add('messageStyle');
 
-// variabel untuk loop
+
 let bird_dy = 0;
 let pipe_seperation = 0;
 let animationFrameIds = [];
@@ -38,7 +38,7 @@ function resetGame() {
     bird.style.top = '40vh';
     bird_dy = 0;
     pipe_seperation = 0;
-    game_state = 'Start'; // Awal masih "Start", belum "Play"
+    game_state = 'Start';
     message.innerHTML = '';
     score_title.innerHTML = 'Score : ';
     score_val.innerHTML = '0';
@@ -149,7 +149,7 @@ function play(){
         animationFrameIds.push(requestAnimationFrame(create_pipe));
     }
 
-    // Reset handler satu kali saja
+
     document.onkeydown = (e) => {
         if(e.key == 'ArrowUp' || e.key == ' '){
             img.src = 'images/naga-2.png';
@@ -163,7 +163,7 @@ function play(){
         }
     };
 
-    // Jalankan ketiga fungsi utama
+  
     animationFrameIds.push(requestAnimationFrame(move));
     animationFrameIds.push(requestAnimationFrame(apply_gravity));
     animationFrameIds.push(requestAnimationFrame(create_pipe));
@@ -178,10 +178,10 @@ function gameOver() {
     img.style.display = 'none';
     const score = parseInt(score_val.innerHTML);
     
-    // Simpan ke Firebase jika login
+ 
     saveHighScore(score);
     
-    // Simpan ke localStorage jika lebih tinggi
+   
     if (score > highscore) {
         localStorage.setItem('highscore', score);
         highscore = score;
@@ -212,9 +212,9 @@ function startCountdown() {
         if (index < countdownTexts.length) {
             message.innerHTML = countdownTexts[index];
             index++;
-            setTimeout(updateCountdown, 1000); // Tampil tiap 700ms
+            setTimeout(updateCountdown, 1000); 
         } else {
-            // Setelah "Go!" tampil, baru mulai game
+        
             message.innerHTML = '';
             message.classList.remove('messageStyle');
             game_state = 'Play';
