@@ -56,7 +56,13 @@ function resetGame() {
     startCountdown();
 }
 
-playBtn.addEventListener('click', resetGame);
+playBtn.addEventListener('click', () => {
+    sound_countdown321go.currentTime = 0;
+    sound_countdown321go.play().catch(e => {
+        console.log("Audio gagal diputar:", e);
+    });
+    resetGame();
+});
 
 function cancelAllFrames() {
     animationFrameIds.forEach(id => cancelAnimationFrame(id));
@@ -200,8 +206,7 @@ function startCountdown() {
     message.style.display = 'block';
     message.classList.add('messageStyle');
     
-    // Play sekali saat countdown mulai
-    sound_countdown321go.play();
+    
 
     function updateCountdown() {
         if (index < countdownTexts.length) {
