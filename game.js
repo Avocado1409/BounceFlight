@@ -1,4 +1,7 @@
-let move_speed = 10, grativy = 0.18;
+let move_speed = 20, gravity = 0.50;
+let lastTimestamp = 0;
+let lastMoveTimestamp = 0;
+let lastGravityTimestamp = 0;
 let bird = document.querySelector('.bird');
 let img = document.getElementById('bird-1');
 let sound_point = new Audio('sound effect/point.mp3');
@@ -27,7 +30,7 @@ let game_state = 'Start';
 img.style.display = 'none';
 message.classList.add('messageStyle');
 
-
+// variabel untuk loop
 let bird_dy = 0;
 let pipe_seperation = 0;
 let animationFrameIds = [];
@@ -38,7 +41,7 @@ function resetGame() {
     bird.style.top = '40vh';
     bird_dy = 0;
     pipe_seperation = 0;
-    game_state = 'Start';
+    game_state = 'Start'; // Awal masih "Start", belum "Play"
     message.innerHTML = '';
     score_title.innerHTML = 'Score : ';
     score_val.innerHTML = '0';
@@ -70,51 +73,61 @@ function cancelAllFrames() {
 }
 
 function play(){
-    function move(){
-        if(game_state !== 'Play') return;
-
+    function move(timestamp) {
+        if (game_state !== 'Play') return;
+    
+        let delta = (timestamp - lastMoveTimestamp) / 16.67;
+        lastMoveTimestamp = timestamp;
+    
         let pipe_sprite = document.querySelectorAll('.pipe_sprite');
         pipe_sprite.forEach((element) => {
             let pipe_sprite_props = element.getBoundingClientRect();
             bird_props = bird.getBoundingClientRect();
-
-            if(pipe_sprite_props.right <= 0){
+    
+            if (pipe_sprite_props.right <= 0) {
                 element.remove();
             } else {
-                if(bird_props.left < pipe_sprite_props.left + pipe_sprite_props.width &&
-                   bird_props.left + bird_props.width > pipe_sprite_props.left &&
-                   bird_props.top < pipe_sprite_props.top + pipe_sprite_props.height &&
-                   bird_props.top + bird_props.height > pipe_sprite_props.top){
+                if (
+                    bird_props.left < pipe_sprite_props.left + pipe_sprite_props.width &&
+                    bird_props.left + bird_props.width > pipe_sprite_props.left &&
+                    bird_props.top < pipe_sprite_props.top + pipe_sprite_props.height &&
+                    bird_props.top + bird_props.height > pipe_sprite_props.top
+                ) {
                     gameOver();
                     return;
-                } else if(pipe_sprite_props.right < bird_props.left &&
-                         pipe_sprite_props.right + move_speed >= bird_props.left &&
-                         element.increase_score === '1'){
+                } else if (
+                    pipe_sprite_props.right < bird_props.left &&
+                    pipe_sprite_props.right + move_speed * delta >= bird_props.left &&
+                    element.increase_score === '1'
+                ) {
                     score_val.innerHTML = parseInt(score_val.innerHTML) + 1;
                     sound_point.play();
                     element.increase_score = '0';
                 }
-
-                element.style.left = pipe_sprite_props.left - move_speed + 'px';
+    
+                element.style.left = pipe_sprite_props.left - move_speed * delta + 'px';
             }
         });
-
+    
         animationFrameIds.push(requestAnimationFrame(move));
     }
-
-    function apply_gravity(){
-        if(game_state !== 'Play') return;
-
-        bird_dy += grativy;
-
-        if(bird_props.top <= 0 || bird_props.bottom >= background.bottom){
+    
+    function apply_gravity(timestamp) {
+        if (game_state !== 'Play') return;
+    
+        let delta = (timestamp - lastGravityTimestamp) / 16.67;
+        lastGravityTimestamp = timestamp;
+    
+        bird_dy += gravity * delta;
+    
+        if (bird_props.top <= 0 || bird_props.bottom >= background.bottom) {
             gameOver();
             return;
         }
-
+    
         bird.style.top = bird_props.top + bird_dy + 'px';
         bird_props = bird.getBoundingClientRect();
-
+    
         animationFrameIds.push(requestAnimationFrame(apply_gravity));
     }
 
@@ -149,7 +162,7 @@ function play(){
         animationFrameIds.push(requestAnimationFrame(create_pipe));
     }
 
-
+    // Reset handler satu kali saja
     document.onkeydown = (e) => {
         if(e.key == 'ArrowUp' || e.key == ' '){
             img.src = 'images/naga-2.png';
@@ -163,10 +176,12 @@ function play(){
         }
     };
 
-  
+    lastTimestamp = performance.now();
     animationFrameIds.push(requestAnimationFrame(move));
     animationFrameIds.push(requestAnimationFrame(apply_gravity));
     animationFrameIds.push(requestAnimationFrame(create_pipe));
+    lastMoveTimestamp = performance.now();
+    lastGravityTimestamp = performance.now();
 }
 
 function gameOver() {
@@ -178,10 +193,10 @@ function gameOver() {
     img.style.display = 'none';
     const score = parseInt(score_val.innerHTML);
     
- 
+    // Simpan ke Firebase jika login
     saveHighScore(score);
     
-   
+    // Simpan ke localStorage jika lebih tinggi
     if (score > highscore) {
         localStorage.setItem('highscore', score);
         highscore = score;
@@ -212,9 +227,9 @@ function startCountdown() {
         if (index < countdownTexts.length) {
             message.innerHTML = countdownTexts[index];
             index++;
-            setTimeout(updateCountdown, 1000); 
+            setTimeout(updateCountdown, 1000); // Tampil tiap 700ms
         } else {
-        
+            // Setelah "Go!" tampil, baru mulai game
             message.innerHTML = '';
             message.classList.remove('messageStyle');
             game_state = 'Play';
